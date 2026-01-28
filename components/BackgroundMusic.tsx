@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const BackgroundMusic: React.FC = () => {
-    const [isPlaying, setIsPlaying] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     useEffect(() => {
-        // Initialize audio
-        const audio = new Audio('bgm.mp3');
+        // Initialize audio with root-relative path to handle sub-routes correctly
+        const audio = new Audio('/bgm.mp3');
         audio.loop = true;
-        audio.volume = 0.5;
+        audio.volume = 0.6; // Slightly louder
         audioRef.current = audio;
 
         const startAudio = () => {
@@ -20,8 +20,10 @@ const BackgroundMusic: React.FC = () => {
                     window.removeEventListener('click', startAudio);
                     window.removeEventListener('touchstart', startAudio);
                     window.removeEventListener('scroll', startAudio);
-                }).catch(() => {
-                    console.log("Autoplay prevented, waiting for interaction.");
+                    window.removeEventListener('keydown', startAudio);
+                }).catch((error) => {
+                    console.log("Autoplay prevented:", error);
+                    setIsPlaying(false);
                 });
             }
         };
@@ -29,10 +31,11 @@ const BackgroundMusic: React.FC = () => {
         // Try to play immediately
         startAudio();
 
-        // Also listen for first interaction
+        // Listen for user interactions to trigger play
         window.addEventListener('click', startAudio);
         window.addEventListener('touchstart', startAudio);
         window.addEventListener('scroll', startAudio);
+        window.addEventListener('keydown', startAudio);
 
         return () => {
             if (audioRef.current) {
@@ -42,6 +45,7 @@ const BackgroundMusic: React.FC = () => {
             window.removeEventListener('click', startAudio);
             window.removeEventListener('touchstart', startAudio);
             window.removeEventListener('scroll', startAudio);
+            window.removeEventListener('keydown', startAudio);
         };
     }, []);
 
@@ -50,12 +54,15 @@ const BackgroundMusic: React.FC = () => {
 
         if (isPlaying) {
             audioRef.current.pause();
+            setIsPlaying(false);
         } else {
-            audioRef.current.play().catch(error => {
-                console.error("Audio playback failed:", error);
+            audioRef.current.play().then(() => {
+                setIsPlaying(true);
+            }).catch(error => {
+                console.error("Manual playback failed:", error);
+                setIsPlaying(false);
             });
         }
-        setIsPlaying(!isPlaying);
     };
 
     return (
