@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const BackgroundMusic: React.FC = () => {
-    const [isPlaying, setIsPlaying] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     useEffect(() => {
@@ -9,6 +9,15 @@ const BackgroundMusic: React.FC = () => {
         audioRef.current = new Audio('bgm.mp3');
         audioRef.current.loop = true;
         audioRef.current.volume = 0.5;
+
+        // Attempt to play by default
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                console.log("Autoplay prevented by browser, waiting for interaction.");
+                setIsPlaying(false);
+            });
+        }
 
         return () => {
             if (audioRef.current) {
