@@ -6,24 +6,42 @@ const BackgroundMusic: React.FC = () => {
 
     useEffect(() => {
         // Initialize audio
-        audioRef.current = new Audio('bgm.mp3');
-        audioRef.current.loop = true;
-        audioRef.current.volume = 0.5;
+        const audio = new Audio('bgm.mp3');
+        audio.loop = true;
+        audio.volume = 0.5;
+        audioRef.current = audio;
 
-        // Attempt to play by default
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(() => {
-                console.log("Autoplay prevented by browser, waiting for interaction.");
-                setIsPlaying(false);
-            });
-        }
+        const startAudio = () => {
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    setIsPlaying(true);
+                    // Remove listeners once playing
+                    window.removeEventListener('click', startAudio);
+                    window.removeEventListener('touchstart', startAudio);
+                    window.removeEventListener('scroll', startAudio);
+                }).catch(() => {
+                    console.log("Autoplay prevented, waiting for interaction.");
+                });
+            }
+        };
+
+        // Try to play immediately
+        startAudio();
+
+        // Also listen for first interaction
+        window.addEventListener('click', startAudio);
+        window.addEventListener('touchstart', startAudio);
+        window.addEventListener('scroll', startAudio);
 
         return () => {
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current = null;
             }
+            window.removeEventListener('click', startAudio);
+            window.removeEventListener('touchstart', startAudio);
+            window.removeEventListener('scroll', startAudio);
         };
     }, []);
 
