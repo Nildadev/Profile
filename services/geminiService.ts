@@ -6,10 +6,16 @@ export class GeminiService {
 
   async summarizePost(title: string, content: string): Promise<string> {
     try {
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      if (!apiKey) {
+        console.error("Gemini Error: VITE_GEMINI_API_KEY is not defined in environment variables.");
+        return "Lỗi: Chưa cấu hình API Key cho AI.";
+      }
+
       // Create a new GoogleGenAI instance right before making an API call to ensure latest API key usage
-      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash-preview',
+        model: 'gemini-1.5-flash', // Using a more stable model name
         contents: `Hãy tóm tắt bài viết sau đây một cách súc tích và hấp dẫn cho người đọc: 
         Tiêu đề: ${title}
         Nội dung: ${content}`,
@@ -19,23 +25,32 @@ export class GeminiService {
       });
       // Directly access the .text property from GenerateContentResponse
       return response.text || "Không thể tạo tóm tắt vào lúc này.";
-    } catch (error) {
-      console.error("Gemini Error:", error);
+    } catch (error: any) {
+      console.error("Gemini Detailed Error:", error);
+      if (error?.message) {
+        console.error("Error Message:", error.message);
+      }
       return "Lỗi khi kết nối với AI để tóm tắt bài viết.";
     }
   }
 
   async getInsights(category: string, tags: string[]): Promise<string> {
     try {
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      if (!apiKey) {
+        return "Sáng tạo là không giới hạn.";
+      }
+
       // Create a new GoogleGenAI instance right before making an API call
-      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: 'gemini-1.5-flash',
         contents: `Dựa trên chuyên mục "${category}" và các thẻ từ khóa [${tags.join(', ')}], hãy đưa ra 1 lời khuyên ngắn gọn hoặc xu hướng mới nhất trong lĩnh vực này.`,
       });
       // Directly access the .text property from GenerateContentResponse
       return response.text || "Tiếp tục sáng tạo nhé!";
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Gemini Insights Error:", error);
       return "Sáng tạo là không giới hạn.";
     }
   }
