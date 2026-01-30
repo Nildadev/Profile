@@ -24,7 +24,7 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          <h1 className="text-[clamp(2.5rem,10vw,8rem)] font-black tracking-[-0.05em] leading-[1.15] md:leading-[1.15] text-slate-900 dark:text-white uppercase py-6 drop-shadow-sm">
+          <h1 className="text-[clamp(2.5rem,10vw,8rem)] font-black tracking-[-0.05em] leading-[1.1] md:leading-[1.2] text-slate-900 dark:text-white uppercase py-6 drop-shadow-sm">
             MAKING <br className="hidden md:block" />
             <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-400 bg-clip-text text-transparent italic px-5 pb-2 drop-shadow-md">SENSE</span> OF <br className="hidden md:block" />
             THE <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-400 bg-clip-text text-transparent italic px-5 pb-2 drop-shadow-md">SKY.</span>
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
         <div className="flex flex-col md:flex-row items-end justify-between gap-10 mb-24 animate-slide-up">
           <div className="space-y-4">
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary">Selected Works</h4>
-            <h2 className="text-4xl md:text-8xl font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9] md:leading-none">
+            <h2 className="text-4xl md:text-8xl font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1] md:leading-tight">
               Tâm điểm <br /> sáng tạo.
             </h2>
           </div>
@@ -80,7 +80,7 @@ const Home: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-4 space-y-12">
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary">Expertise</h4>
-            <h3 className="text-5xl font-black tracking-tighter leading-[0.9] text-slate-900 dark:text-white">
+            <h3 className="text-5xl font-black tracking-tighter leading-[1.1] text-slate-900 dark:text-white">
               Công nghệ <br /> định hình <br /> tương lai.
             </h3>
             <p className="text-slate-700 dark:text-slate-300 font-medium max-w-xs leading-relaxed">

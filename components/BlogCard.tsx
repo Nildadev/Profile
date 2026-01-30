@@ -26,7 +26,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
             <span className="text-[10px] font-bold text-slate-500">{new Date(post.date).toLocaleDateString()}</span>
           </div>
 
-          <h3 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white group-hover:text-brand-primary transition-colors duration-500 leading-[1.1]">
+          <h3 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white group-hover:text-brand-primary transition-colors duration-500 leading-tight">
             {post.title}
           </h3>
 

@@ -15,9 +15,9 @@ const About: React.FC = () => {
         <div className="space-y-12 animate-slide-up">
           <div className="space-y-4">
             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary">The Profile</h4>
-            <h1 className="text-5xl md:text-9xl font-black tracking-tighter text-slate-900 dark:text-white leading-[0.85]">
-              {profile.name.split(' ')[0]} <br />
-              <span className="text-brand-primary italic">{profile.name.split(' ').slice(1).join(' ')}</span>
+            <h1 className="text-5xl md:text-9xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight">
+              {(profile.name || '').split(' ')[0]} <br />
+              <span className="text-brand-primary italic">{(profile.name || '').split(' ').slice(1).join(' ')}</span>
             </h1>
           </div>
 
@@ -25,7 +25,7 @@ const About: React.FC = () => {
             "{profile.role}"
           </p>
 
-          <div className="space-y-6 text-slate-500 dark:text-slate-400 font-medium leading-relaxed text-lg">
+          <div className="space-y-6 text-slate-500 dark:text-slate-400 font-medium leading-relaxed text-lg whitespace-pre-wrap">
             <p>{profile.bio}</p>
           </div>
 
@@ -51,10 +51,26 @@ const About: React.FC = () => {
           )}
         </div>
 
-        <div className="relative group animate-blur-in">
-          <div className="absolute -inset-10 bg-brand-primary/10 rounded-[5rem] blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="relative aspect-[3/4] rounded-5xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-1000 shadow-2xl border border-white/5">
-            <img src={profile.avatar} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000" />
+        <div className="relative group animate-blur-in lg:translate-x-12">
+          {/* Decorative Background Elements */}
+          <div className="absolute -inset-4 bg-gradient-to-tr from-brand-primary to-brand-secondary rounded-[4rem] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-1000"></div>
+          <div className="absolute -inset-10 bg-brand-primary/10 rounded-[5rem] blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+
+          <div className="relative">
+            {/* The Main Image Container with a Double Border effect */}
+            <div className="relative aspect-square rounded-[3rem] md:rounded-[4rem] overflow-hidden shadow-2xl border-4 border-white/10 group-hover:border-brand-primary/30 transition-all duration-1000">
+              <img
+                src={profile.avatar}
+                className="w-full h-full object-contain transition-transform duration-[1500ms] ease-out"
+                alt={profile.name}
+              />
+            </div>
+
+            {/* Floating Info Tag */}
+            <div className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 p-6 md:p-8 glass rounded-3xl md:rounded-[2.5rem] border border-white/10 shadow-2xl transform group-hover:-translate-y-4 transition-transform duration-700 hidden sm:block">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary mb-2">Based in</p>
+              <p className="text-lg md:text-xl font-black tracking-tight text-slate-900 dark:text-white">Saigon, VN</p>
+            </div>
           </div>
         </div>
       </section>

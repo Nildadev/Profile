@@ -36,6 +36,15 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
   const [designForm, setDesignForm] = useState<DesignSettings>(design);
   const [editingPost, setEditingPost] = useState<Partial<BlogPost> | null>(null);
 
+  // Sync local form with context when context changes (e.g. on cloud load)
+  React.useEffect(() => {
+    setProfileForm(profile);
+  }, [profile]);
+
+  React.useEffect(() => {
+    setDesignForm(design);
+  }, [design]);
+
   if (!isOpen) return null;
 
   if (!isAdmin) {
@@ -92,11 +101,13 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
     updateProfile(profileForm);
+    alert('✅ Đã lưu hồ sơ cục bộ!');
   };
 
   const handleSaveDesign = (e: React.FormEvent) => {
     e.preventDefault();
     updateDesign(designForm);
+    alert('✅ Đã lưu thiết kế cục bộ!');
   };
 
   const handleSavePost = (e: React.FormEvent) => {
@@ -158,6 +169,10 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
                 <input type="file" ref={avatarInputRef} className="hidden" accept="image/*" onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
+                    if (file.size > 800 * 1024) {
+                      alert('⚠️ Ảnh quá lớn (>800KB). Hãy nén ảnh hoặc dùng URL.');
+                      return;
+                    }
                     const reader = new FileReader();
                     reader.onload = (ev) => setProfileForm({ ...profileForm, avatar: ev.target?.result as string });
                     reader.readAsDataURL(file);
@@ -279,6 +294,7 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
                     <button type="button" onClick={() => setEditingPost(null)} className="text-[10px] font-black uppercase tracking-widest px-4 py-2 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all">Đóng Editor</button>
                   </div>
                   <div className="space-y-3"><label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Tiêu đề bài viết</label><input required className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-brand-primary outline-none transition-all text-lg font-bold" placeholder="Nhập tiêu đề hấp dẫn..." value={editingPost.title || ''} onChange={e => setEditingPost({ ...editingPost, title: e.target.value })} /></div>
+                  <div className="space-y-3"><label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Tóm tắt ngắn (Excerpt)</label><textarea rows={2} required className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-brand-primary outline-none transition-all text-sm font-medium" placeholder="Nhập tóm tắt ngắn cho bài viết..." value={editingPost.excerpt || ''} onChange={e => setEditingPost({ ...editingPost, excerpt: e.target.value })} /></div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3"><label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Chuyên mục</label><select className="w-full bg-slate-900 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-brand-primary outline-none transition-all cursor-pointer" value={editingPost.category} onChange={e => setEditingPost({ ...editingPost, category: e.target.value as Category })}>{Object.values(Category).map(c => <option key={c} value={c}>{c}</option>)}</select></div>
                     <div className="space-y-3"><label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Đường dẫn ảnh nền (Unsplash/Picsum)</label><input className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-brand-primary outline-none transition-all text-sm font-mono" placeholder="https://..." value={editingPost.imageUrl || ''} onChange={e => setEditingPost({ ...editingPost, imageUrl: e.target.value })} /></div>
@@ -400,7 +416,7 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
 
 
                     {showPreview ? (
-                      <div className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-slate-300 min-h-[300px] prose dark:prose-invert max-w-none">
+                      <div className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-slate-300 min-h-[300px] prose dark:prose-invert max-w-none whitespace-pre-wrap">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
                           rehypePlugins={[rehypeRaw]}

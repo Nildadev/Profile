@@ -44,10 +44,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     const initData = async () => {
       setIsLoading(true);
-      
+
       // 1. Thử tải từ Cloud
       const cloudData = await cloudService.fetchAllData();
-      
+
       if (cloudData) {
         setProfile(cloudData.profile);
         setPosts(cloudData.posts);
@@ -57,12 +57,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const savedProfile = localStorage.getItem('user_profile');
         const savedPosts = localStorage.getItem('blog_posts');
         const savedDesign = localStorage.getItem('app_design');
-        
-        if (savedProfile) setProfile(JSON.parse(savedProfile));
-        if (savedPosts) setPosts(JSON.parse(savedPosts));
-        if (savedDesign) setDesign(JSON.parse(savedDesign));
+
+        if (savedProfile) {
+          try {
+            const parsed = JSON.parse(savedProfile);
+            if (parsed && typeof parsed === 'object') setProfile(parsed);
+          } catch (e) {
+            console.error('Failed to parse profile from local storage', e);
+          }
+        }
+        if (savedPosts) {
+          try {
+            const parsed = JSON.parse(savedPosts);
+            if (Array.isArray(parsed)) setPosts(parsed);
+          } catch (e) {
+            console.error('Failed to parse posts from local storage', e);
+          }
+        }
+        if (savedDesign) {
+          try {
+            const parsed = JSON.parse(savedDesign);
+            if (parsed && typeof parsed === 'object') setDesign(parsed);
+          } catch (e) {
+            console.error('Failed to parse design from local storage', e);
+          }
+        }
       }
-      
+
       setIsLoading(false);
     };
 
@@ -77,11 +98,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIsSyncing(false);
   };
 
-  // Tự động lưu LocalStorage để trải nghiệm mượt mà
   useEffect(() => {
-    localStorage.setItem('user_profile', JSON.stringify(profile));
-    localStorage.setItem('blog_posts', JSON.stringify(posts));
-    localStorage.setItem('app_design', JSON.stringify(design));
+    try {
+      localStorage.setItem('user_profile', JSON.stringify(profile));
+      localStorage.setItem('blog_posts', JSON.stringify(posts));
+      localStorage.setItem('app_design', JSON.stringify(design));
+    } catch (e) {
+      console.warn('LocalStorage limit reached. Changes only kept in memory until refresh.', e);
+    }
   }, [profile, posts, design]);
 
   // Apply Theme & CSS Variables
@@ -165,7 +189,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const deletePost = (id: string) => setPosts(posts.filter(p => p.id !== id));
 
   return (
-    <AppContext.Provider value={{ 
+    <AppContext.Provider value={{
       profile, posts, theme, design, isAdmin, isLoading, isSyncing,
       toggleTheme, login, logout, updateProfile, updateDesign,
       addPost, updatePost, deletePost, syncData, exportData, importData

@@ -64,7 +64,7 @@ const BlogPostDetail: React.FC = () => {
           </span>
         </div>
 
-        <h1 className="text-3xl md:text-7xl font-extrabold tracking-tighter leading-[1.1] max-w-4xl mx-auto text-slate-900 dark:text-white uppercase italic">
+        <h1 className="text-3xl md:text-7xl font-extrabold tracking-tighter leading-tight md:leading-[1.2] max-w-4xl mx-auto text-slate-900 dark:text-white uppercase italic">
           {post.title}
         </h1>
 
@@ -87,11 +87,11 @@ const BlogPostDetail: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 pb-40">
         <div className="lg:col-span-8 space-y-8 md:space-y-12 animate-slide-up">
           <div className="prose dark:prose-invert max-w-none">
-            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 md:mb-12 italic border-l-4 border-brand-primary pl-6 md:pl-8">
+            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 font-medium leading-relaxed mb-8 md:mb-12 italic border-l-4 border-brand-primary pl-6 md:pl-8 whitespace-pre-wrap">
               {post.excerpt}
             </p>
 
-            <div className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed font-medium markdown-content">
+            <div className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed font-medium markdown-content whitespace-pre-wrap">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeRaw]}

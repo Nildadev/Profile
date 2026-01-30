@@ -36,7 +36,7 @@ const BlogList: React.FC = () => {
   return (
     <div className="space-y-12 md:space-y-20 pt-32 pb-12 min-h-screen">
       <div className="space-y-4 text-center max-w-3xl mx-auto px-6 animate-fade-in">
-        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white">
+        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight">
           Thư viện <span className="text-brand-primary">NilSpace</span>
         </h1>
         <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 font-medium italic">
