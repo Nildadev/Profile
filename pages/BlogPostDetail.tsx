@@ -1,9 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import ReactMarkdown from 'react-markdown';
 import CodeBlock from '../components/CodeBlock';
+import TableOfContents from '../components/TableOfContents';
+import BlogCard from '../components/BlogCard';
 
 const BlogPostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +13,11 @@ const BlogPostDetail: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const post = posts.find(p => p.id === id);
+
+  // Related Posts Logic
+  const relatedPosts = post ? posts.filter(p =>
+    p.id !== post.id && p.tags.some(tag => post.tags.includes(tag))
+  ).slice(0, 2) : [];
 
   useEffect(() => {
     if (!post) {
@@ -31,20 +37,20 @@ const BlogPostDetail: React.FC = () => {
   if (!post) return null;
 
   return (
-    <div className="max-w-6xl mx-auto py-12 px-6">
+    <div className="max-w-6xl mx-auto pt-32 pb-12 px-6">
       <header className="mb-20 text-center space-y-8 animate-fade-in">
         {/* Breadcrumbs Navigation */}
         <nav className="flex items-center justify-center gap-3 mb-10 text-[10px] font-black uppercase tracking-[0.3em]">
-          <Link to="/" className="text-slate-500 hover:text-brand-primary transition-colors">Trang chủ</Link>
+          <Link to="/" className="text-slate-600 hover:text-brand-primary transition-colors">Trang chủ</Link>
           <span className="text-slate-800 dark:text-slate-700">/</span>
-          <Link to="/blog" className="text-slate-500 hover:text-brand-primary transition-colors">Thư viện</Link>
+          <Link to="/blog" className="text-slate-600 hover:text-brand-primary transition-colors">Thư viện</Link>
           <span className="text-slate-800 dark:text-slate-700">/</span>
-          <span className="text-brand-primary/60 truncate max-w-[150px] md:max-w-xs">{post.title}</span>
+          <span className="text-brand-primary/80 truncate max-w-[150px] md:max-w-xs">{post.title}</span>
         </nav>
 
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-white border-white/5 transition-all mb-4 group"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-white border-white/5 transition-all mb-4 group"
         >
           <svg className="w-3 h-3 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           Quay lại
@@ -99,6 +105,14 @@ const BlogPostDetail: React.FC = () => {
                         {children}
                       </code>
                     );
+                  },
+                  h2: ({ children }) => {
+                    const id = String(children).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+                    return <h2 id={id} className="scroll-mt-32 text-2xl font-bold mt-12 mb-6 text-slate-900 dark:text-white group relative"><a href={`#${id}`} className="absolute -left-6 opacity-0 group-hover:opacity-100 text-brand-primary transition-opacity">#</a>{children}</h2>;
+                  },
+                  h3: ({ children }) => {
+                    const id = String(children).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+                    return <h3 id={id} className="scroll-mt-32 text-xl font-bold mt-8 mb-4 text-slate-800 dark:text-slate-200">{children}</h3>;
                   }
                 }}
               >
@@ -116,10 +130,29 @@ const BlogPostDetail: React.FC = () => {
               </button>
             </div>
           </div>
+
+          {/* Related Posts Section */}
+          {relatedPosts.length > 0 && (
+            <div className="mt-20 pt-12 border-t border-white/10">
+              <h3 className="text-xl font-black uppercase tracking-tighter mb-8 text-slate-900 dark:text-white italic">Bài viết liên quan</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {relatedPosts.map(p => (
+                  <div key={p.id} className="scale-90 origin-top-left hover:scale-100 transition-transform duration-500">
+                    <BlogCard post={p} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <aside className="lg:col-span-4 space-y-10">
           <div className="sticky top-32 space-y-10 animate-slide-up" style={{ animationDelay: '200ms' }}>
+
+            {/* Table of Contents */}
+            <div className="p-8 glass rounded-[32px] border-white/5">
+              <TableOfContents content={post.content} />
+            </div>
 
             <div className="p-10 glass rounded-[40px] border-white/5 space-y-8">
               <h4 className="font-black text-sm uppercase tracking-widest text-slate-900 dark:text-white">Thông tin bài viết</h4>

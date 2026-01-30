@@ -4,6 +4,8 @@ import { useApp } from '../context/AppContext';
 import { Category, BlogPost, DesignSettings } from '../types';
 import { DEFAULT_DESIGN } from '../constants';
 import { cloudService } from '../services/cloudService';
+import ReactMarkdown from 'react-markdown';
+import CodeBlock from './CodeBlock';
 
 interface EditorModalProps {
   isOpen: boolean;
@@ -21,6 +23,7 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const postImageInputRef = useRef<HTMLInputElement>(null);
@@ -278,7 +281,61 @@ const EditorModal: React.FC<EditorModalProps> = ({ isOpen, onClose }) => {
                     <div className="space-y-3"><label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Đường dẫn ảnh nền (Unsplash/Picsum)</label><input className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-brand-primary outline-none transition-all text-sm font-mono" placeholder="https://..." value={editingPost.imageUrl || ''} onChange={e => setEditingPost({ ...editingPost, imageUrl: e.target.value })} /></div>
                   </div>
                   <div className="space-y-3"><label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Thẻ bài viết (Cách nhau bằng dấu phẩy)</label><input className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-brand-primary outline-none transition-all text-sm" placeholder="Ví dụ: React, AI, Design..." value={editingPost.tags?.join(', ') || ''} onChange={e => setEditingPost({ ...editingPost, tags: e.target.value.split(',').map(t => t.trim()).filter(t => t !== '') })} /></div>
-                  <div className="space-y-3"><label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Nội dung chi tiết (Markdown support)</label><textarea rows={12} className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-white mono text-sm leading-relaxed focus:border-brand-primary outline-none transition-all" placeholder="Gõ nội dung tại đây..." value={editingPost.content || ''} onChange={e => setEditingPost({ ...editingPost, content: e.target.value })} /></div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Nội dung chi tiết (Markdown support)</label>
+                      <button type="button" onClick={() => setShowPreview(!showPreview)} className="text-[10px] font-bold uppercase tracking-widest text-brand-primary hover:text-white transition-colors">
+                        {showPreview ? 'Quay lại soạn thảo' : 'Xem trước bài viết'}
+                      </button>
+                    </div>
+
+                    {!showPreview && (
+                      <div className="flex gap-2 pb-2">
+                        {[
+                          { label: 'B', action: '**nguồn**', tooltip: 'In đậm' },
+                          { label: 'I', action: '*nghiêng*', tooltip: 'In nghiêng' },
+                          { label: 'Link', action: '[text](url)', tooltip: 'Chèn liên kết' },
+                          { label: 'Img', action: '![alt](url)', tooltip: 'Chèn hình ảnh' },
+                          { label: 'Code', action: '```\ncode\n```', tooltip: 'Chèn mã nguồn' },
+                        ].map(tool => (
+                          <button
+                            key={tool.label}
+                            type="button"
+                            onClick={() => setEditingPost({ ...editingPost, content: (editingPost.content || '') + tool.action })}
+                            className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-white/10 hover:border-brand-primary transition-all font-mono"
+                            title={tool.tooltip}
+                          >
+                            {tool.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {showPreview ? (
+                      <div className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-slate-300 min-h-[300px] prose dark:prose-invert max-w-none">
+                        <ReactMarkdown components={{
+                          code({ node, inline, className, children, ...props }: any) {
+                            const match = /language-(\w+)/.exec(className || '');
+                            return !inline && match ? (
+                              <CodeBlock language={match[1]} value={String(children).replace(/\n$/, '')} />
+                            ) : (
+                              <code className={className} {...props}>{children}</code>
+                            );
+                          }
+                        }}>
+                          {editingPost.content || '*Chưa có nội dung*'}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <textarea
+                        rows={12}
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-6 text-white mono text-sm leading-relaxed focus:border-brand-primary outline-none transition-all"
+                        placeholder="Gõ nội dung tại đây..."
+                        value={editingPost.content || ''}
+                        onChange={e => setEditingPost({ ...editingPost, content: e.target.value })}
+                      />
+                    )}
+                  </div>
                   <button type="submit" className="w-full py-5 bg-brand-primary text-white font-black rounded-2xl shadow-xl shadow-brand-primary/20 hover:brightness-110 active:scale-[0.99] transition-all uppercase tracking-[0.2em] italic">XUẤT BẢN NỘI DUNG</button>
                 </form>
               )}

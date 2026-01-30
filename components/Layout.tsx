@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import BackgroundMusic from './BackgroundMusic';
+import SkyBackground from './SkyBackground';
+import SearchOverlay from './SearchOverlay';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const { theme, toggleTheme, isLoading, isSyncing, isAdmin } = useApp();
+  const { theme, toggleTheme, isLoading, isSyncing, isAdmin, design } = useApp();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -22,20 +24,25 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   if (isLoading) {
     return (
-      <div className="h-screen w-screen flex flex-col items-center justify-center bg-brand-dark space-y-8">
+      <div
+        className="h-screen w-screen flex flex-col items-center justify-center space-y-8 transition-colors duration-500"
+        style={{ backgroundColor: theme === 'dark' ? design.bgDark : design.bgLight }}
+      >
         <div className="w-20 h-20 bg-brand-primary rounded-[32px] animate-bounce flex items-center justify-center shadow-[0_0_50px_rgba(var(--color-primary-rgb),0.5)]">
           <span className="text-white font-black text-2xl">N</span>
         </div>
         <div className="space-y-2 text-center">
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-primary animate-pulse">Initializing System</p>
-          <p className="text-slate-600 text-[9px] uppercase font-bold tracking-widest">Fetching Cloud Assets...</p>
+          <p className="text-slate-600 dark:text-slate-400 text-[9px] uppercase font-bold tracking-widest">Fetching Cloud Assets...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
+      <SkyBackground />
+      <SearchOverlay />
       <header className="fixed top-0 left-0 right-0 z-50 flex justify-center py-4 md:py-8 pointer-events-none px-4">
         <nav className={`
           pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]

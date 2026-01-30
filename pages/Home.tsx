@@ -10,11 +10,11 @@ const Home: React.FC = () => {
   return (
     <div className="overflow-hidden">
       {/* Hero Section - Maximum Impact */}
-      <section className="relative h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden pt-32 pb-20">
         {/* Background Visuals - Refined to avoid boxy artifacts */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle_at_center,var(--color-primary)_0%,transparent_50%)] opacity-[0.07] blur-[120px]"></div>
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-brand-dark/20 to-brand-dark"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180%] h-[180%] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.15)_0%,transparent_60%)] opacity-[0.4] blur-[150px] animate-pulse-slow"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-brand-dark/5 to-brand-dark/80"></div>
         </div>
 
         <div className="relative z-10 text-center space-y-12 animate-slide-up">
@@ -24,13 +24,13 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          <h1 className="text-[clamp(2.5rem,10vw,8rem)] font-black tracking-[-0.05em] leading-[0.95] md:leading-[0.9] text-slate-900 dark:text-white uppercase">
+          <h1 className="text-[clamp(2.5rem,10vw,8rem)] font-black tracking-[-0.05em] leading-[1.15] md:leading-[1.15] text-slate-900 dark:text-white uppercase py-6 drop-shadow-sm">
             MAKING <br className="hidden md:block" />
-            <span className="bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-primary bg-clip-text text-transparent italic">SENSE</span> OF <br className="hidden md:block" />
-            THE <span className="text-slate-200 dark:text-slate-800">VOID.</span>
+            <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-400 bg-clip-text text-transparent italic px-5 pb-2 drop-shadow-md">SENSE</span> OF <br className="hidden md:block" />
+            THE <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-400 bg-clip-text text-transparent italic px-5 pb-2 drop-shadow-md">SKY.</span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-lg md:text-xl font-medium text-slate-700 dark:text-slate-300 leading-relaxed">
+          <p className="max-w-2xl mx-auto text-lg md:text-xl font-medium text-slate-900 dark:text-slate-200 leading-relaxed">
             Tôi là {profile.name}. Nhà phát triển sản phẩm tập trung vào sự tối giản, hiệu suất và những trải nghiệm số đầy cảm hứng.
           </p>
 
@@ -83,7 +83,7 @@ const Home: React.FC = () => {
             <h3 className="text-5xl font-black tracking-tighter leading-[0.9] text-slate-900 dark:text-white">
               Công nghệ <br /> định hình <br /> tương lai.
             </h3>
-            <p className="text-slate-500 dark:text-slate-400 font-medium max-w-xs leading-relaxed">
+            <p className="text-slate-700 dark:text-slate-300 font-medium max-w-xs leading-relaxed">
               Từ việc viết script tự động hóa đến xây dựng các framework web hiện đại và nghệ thuật đồ họa.
             </p>
           </div>
@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                 <svg className="w-5 h-5 md:w-6 md:h-6 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
               </div>
               <h4 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">Fullstack Dev</h4>
-              <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm leading-relaxed">Sử dụng React, Node.js và TypeScript để tạo ra các hệ thống web có khả năng mở rộng cực cao.</p>
+              <p className="text-slate-700 dark:text-slate-300 text-xs md:text-sm leading-relaxed">Sử dụng React, Node.js và TypeScript để tạo ra các hệ thống web có khả năng mở rộng cực cao.</p>
             </div>
 
             <div className="p-8 md:p-12 glass rounded-3xl md:rounded-5xl bento-card space-y-6 md:space-y-8 bg-brand-secondary/5">
@@ -102,13 +102,13 @@ const Home: React.FC = () => {
                 <svg className="w-5 h-5 md:w-6 md:h-6 text-brand-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               </div>
               <h4 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">Tech Artist</h4>
-              <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm leading-relaxed">Giao thoa giữa code và mỹ thuật. Tạo ra các hiệu ứng hình ảnh và giao diện người dùng sống động.</p>
+              <p className="text-slate-700 dark:text-slate-300 text-xs md:text-sm leading-relaxed">Giao thoa giữa code và mỹ thuật. Tạo ra các hiệu ứng hình ảnh và giao diện người dùng sống động.</p>
             </div>
 
             <div className="p-8 md:p-12 glass rounded-3xl md:rounded-5xl bento-card space-y-6 md:space-y-8 md:col-span-2 flex flex-col md:flex-row items-center gap-6 md:gap-10">
               <div className="flex-1 space-y-4 text-center md:text-left">
                 <h4 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">AI Integrated Workflow</h4>
-                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Áp dụng các mô hình ngôn ngữ lớn (LLM) để tối ưu hóa quá trình phát triển phần mềm và sáng tạo nội dung.</p>
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">Áp dụng các mô hình ngôn ngữ lớn (LLM) để tối ưu hóa quá trình phát triển phần mềm và sáng tạo nội dung.</p>
               </div>
               <div className="flex gap-4">
                 <div className="w-20 h-20 bg-slate-100 dark:bg-white/[0.05] rounded-3xl border border-slate-200 dark:border-white/10 flex items-center justify-center text-brand-primary">
@@ -128,9 +128,9 @@ const Home: React.FC = () => {
         <h2 className="text-5xl md:text-9xl font-black tracking-tighter opacity-10 uppercase italic text-slate-900 dark:text-white">Get in touch</h2>
         <div className="max-w-2xl mx-auto space-y-6 md:space-y-8">
           <h3 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">Hãy bắt đầu một cuộc hội thoại?</h3>
-          <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 font-medium px-4 md:px-0">Gửi mail hoặc kết nối qua các nền tảng mạng xã hội để thảo luận về dự án tiếp theo của bạn.</p>
+          <p className="text-sm md:text-base text-slate-700 dark:text-slate-200 font-medium px-4 md:px-0">Gửi mail hoặc kết nối qua các nền tảng mạng xã hội để thảo luận về dự án tiếp theo của bạn.</p>
           <div className="pt-8">
-            <a href={profile.socials?.github || '#'} target="_blank" className="inline-flex items-center gap-4 px-12 py-6 bg-brand-primary text-white rounded-full font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-brand-primary/20">
+            <a href="https://github.com/Nildadev" target="_blank" className="inline-flex items-center gap-4 px-12 py-6 bg-brand-primary text-white rounded-full font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-brand-primary/20">
               GitHub Profile <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
             </a>
           </div>

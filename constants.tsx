@@ -1,10 +1,10 @@
 import { Category, BlogPost, UserProfile, DesignSettings } from './types';
 
 export const DEFAULT_DESIGN: DesignSettings = {
-  primary: '#a855f7', // Purple 500
-  secondary: '#d946ef', // Fuchsia 500
-  bgDark: '#0a0514', // Deep Purple Black
-  bgLight: '#fdfaff', // Light Violet Tint
+  primary: '#0ea5e9', // Sky Blue 500
+  secondary: '#f472b6', // Pink 400 (Sunset/Dawn)
+  bgDark: '#0f172a', // Slate 900
+  bgLight: '#f0f9ff', // Sky 50
 };
 
 export const USER_PROFILE: UserProfile = {
