@@ -7,6 +7,8 @@ import SearchOverlay from './SearchOverlay';
 import CustomCursor from './CustomCursor';
 import SmoothScroll from './SmoothScroll';
 import PageTransition from './PageTransition';
+import MobileNav from './MobileNav';
+import ScrollToTopButton from './ScrollToTopButton';
 import { AnimatePresence } from 'framer-motion';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -49,7 +51,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <CustomCursor />
         <SkyBackground />
         <SearchOverlay />
-        <header className="fixed top-0 left-0 right-0 z-50 flex justify-center py-4 md:py-8 pointer-events-none px-4">
+        <MobileNav />
+        <header className="fixed top-0 left-0 right-0 z-40 flex justify-center py-4 md:py-8 pointer-events-none px-4">
           <nav className={`
             pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]
             flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1.5 md:py-2 rounded-full glass border border-white/5
@@ -64,7 +67,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               )}
             </Link>
 
-            <div className="flex gap-0.5 md:gap-1">
+            <div className="hidden md:flex gap-0.5 md:gap-1">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
@@ -83,16 +86,18 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
 
             <div className="flex items-center ml-1 md:ml-4 border-l border-white/10 pl-1 md:pl-2">
-              <button
-                onClick={toggleTheme}
-                className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-slate-400 hover:text-white flex-shrink-0"
-              >
-                {theme === 'dark' ? (
-                  <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
-                ) : (
-                  <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-                )}
-              </button>
+              <div className="hidden md:flex">
+                <button
+                  onClick={toggleTheme}
+                  className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-slate-400 hover:text-white flex-shrink-0"
+                >
+                  {theme === 'dark' ? (
+                    <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>
+                  ) : (
+                    <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                  )}
+                </button>
+              </div>
               <BackgroundMusic />
             </div>
           </nav>
@@ -105,6 +110,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </PageTransition>
           </AnimatePresence>
         </main>
+
+        <ScrollToTopButton />
 
         <footer className="py-20 md:py-32 bg-black text-white px-6 md:px-8">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-20">

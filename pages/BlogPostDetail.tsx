@@ -13,8 +13,21 @@ const BlogPostDetail: React.FC = () => {
   const navigate = useNavigate();
   const { posts } = useApp();
   const [copied, setCopied] = useState(false);
+  const [readingProgress, setReadingProgress] = useState(0);
 
   const post = posts.find(p => p.id === id);
+
+  useEffect(() => {
+    const updateReadingProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      setReadingProgress(Math.min(Math.max(progress, 0), 100));
+    };
+
+    window.addEventListener('scroll', updateReadingProgress);
+    return () => window.removeEventListener('scroll', updateReadingProgress);
+  }, []);
 
   // Related Posts Logic
   const relatedPosts = post ? posts.filter(p =>
@@ -40,6 +53,13 @@ const BlogPostDetail: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto pt-32 pb-12 px-6">
+      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-200 dark:bg-slate-800">
+        <div
+          className="h-full bg-gradient-to-r from-brand-primary to-brand-secondary transition-all duration-150 ease-out"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
+
       <header className="mb-20 text-center space-y-8 animate-fade-in">
         {/* Breadcrumbs Navigation */}
         <nav className="flex items-center justify-center gap-3 mb-10 text-[10px] font-black uppercase tracking-[0.3em]">
