@@ -5,16 +5,31 @@ import { motion, useSpring, useMotionValue } from 'framer-motion';
 const CustomCursor: React.FC = () => {
     const [isPointer, setIsPointer] = useState(false);
     const [isHidden, setIsHidden] = useState(true);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
 
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    // Smooth out the movement
     const springConfig = { damping: 25, stiffness: 250 };
     const cursorX = useSpring(mouseX, springConfig);
     const cursorY = useSpring(mouseY, springConfig);
 
     useEffect(() => {
+        const checkTouchDevice = () => {
+            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const isMobileWidth = window.innerWidth < 768;
+            setIsTouchDevice(isTouch || isMobileWidth);
+        };
+
+        checkTouchDevice();
+        window.addEventListener('resize', checkTouchDevice);
+
+        return () => window.removeEventListener('resize', checkTouchDevice);
+    }, []);
+
+    useEffect(() => {
+        if (isTouchDevice) return;
+
         const handleMouseMove = (e: MouseEvent) => {
             mouseX.set(e.clientX);
             mouseY.set(e.clientY);
@@ -46,7 +61,9 @@ const CustomCursor: React.FC = () => {
             document.removeEventListener('mouseleave', handleMouseLeave);
             document.removeEventListener('mouseenter', handleMouseEnter);
         };
-    }, [isHidden, mouseX, mouseY]);
+    }, [isHidden, mouseX, mouseY, isTouchDevice]);
+
+    if (isTouchDevice) return null;
 
     return (
         <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
