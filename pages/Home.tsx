@@ -123,19 +123,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Newsletter / Contact CTA */}
-      <section className="max-w-screen-2xl mx-auto px-6 py-20 md:py-40 text-center space-y-8 md:space-y-12">
-        <h2 className="text-5xl md:text-9xl font-black tracking-tighter opacity-10 uppercase italic text-slate-900 dark:text-white">Get in touch</h2>
-        <div className="max-w-2xl mx-auto space-y-6 md:space-y-8">
-          <h3 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 dark:text-white">Hãy bắt đầu một cuộc hội thoại?</h3>
-          <p className="text-sm md:text-base text-slate-700 dark:text-slate-200 font-medium px-4 md:px-0">Gửi mail hoặc kết nối qua các nền tảng mạng xã hội để thảo luận về dự án tiếp theo của bạn.</p>
-          <div className="pt-8">
-            <a href="https://github.com/Nildadev" target="_blank" className="inline-flex items-center gap-4 px-12 py-6 bg-brand-primary text-white rounded-full font-black text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-brand-primary/20">
-              GitHub Profile <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-            </a>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

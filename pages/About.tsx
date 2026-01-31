@@ -2,10 +2,16 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import EditorModal from '../components/EditorModal';
+import Marquee from '../components/Marquee';
 
 const About: React.FC = () => {
   const { profile, isAdmin } = useApp();
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+
+  const techStack = [
+    "React", "TypeScript", "Node.js", "Python", "Tailwind CSS",
+    "Three.js", "WebGL", "CI/CD", "PostgreSQL", "Next.js", "Framer Motion"
+  ];
 
   return (
     <div className="pt-32 md:pt-40 pb-20 md:pb-40">
@@ -73,6 +79,11 @@ const About: React.FC = () => {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="mb-32 md:mb-60">
+        <Marquee items={techStack} />
+        <Marquee items={[...techStack].reverse()} speed={25} reverse />
       </section>
 
       <section className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mb-32 md:mb-60">
