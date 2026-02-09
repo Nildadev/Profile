@@ -13,44 +13,45 @@ const BlogPostDetail: React.FC = () => {
   const navigate = useNavigate();
   const { posts } = useApp();
   const [copied, setCopied] = useState(false);
-  const [readingProgress, setReadingProgress] = useState(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number | undefined>(undefined);
-  const previousProgress = useRef<number>(0);
 
   const post = posts.find(p => p.id === id);
 
   useEffect(() => {
-    let ticking = false;
-
     const updateReadingProgress = () => {
+      if (!progressBarRef.current) return;
+      
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      
+      if (docHeight <= 0) {
+        progressBarRef.current.style.width = '0%';
+        return;
+      }
+      
       const progress = (scrollTop / docHeight) * 100;
       const clampedProgress = Math.min(Math.max(progress, 0), 100);
-
-      if (Math.abs(clampedProgress - previousProgress.current) > 0.5) {
-        setReadingProgress(clampedProgress);
-        previousProgress.current = clampedProgress;
-      }
-
-      ticking = false;
+      
+      progressBarRef.current.style.width = `${clampedProgress}%`;
     };
 
     const onScroll = () => {
-      if (!ticking) {
-        requestRef.current = requestAnimationFrame(updateReadingProgress);
-        ticking = true;
-      }
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      requestRef.current = requestAnimationFrame(updateReadingProgress);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    // Initial update
+    updateReadingProgress();
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       if (requestRef.current !== undefined) {
         cancelAnimationFrame(requestRef.current);
       }
     };
-  }, []);
+  }, [post]); // Re-run when post changes
 
   // Related Posts Logic
   const relatedPosts = post ? posts.filter(p =>
@@ -78,8 +79,8 @@ const BlogPostDetail: React.FC = () => {
     <div className="max-w-6xl mx-auto pt-32 pb-12 px-6">
       <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-200 dark:bg-slate-800">
         <div
-          className="h-full bg-gradient-to-r from-brand-primary to-brand-secondary transition-all duration-150 ease-out"
-          style={{ width: `${readingProgress}%` }}
+          ref={progressBarRef}
+          className="h-full w-0 bg-gradient-to-r from-brand-primary to-brand-secondary transition-all duration-150 ease-out"
         />
       </div>
 
@@ -160,6 +161,24 @@ const BlogPostDetail: React.FC = () => {
                   h3: ({ children }) => {
                     const id = String(children).toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
                     return <h3 id={id} className="scroll-mt-32 text-xl font-bold mt-8 mb-4 text-slate-800 dark:text-slate-200">{children}</h3>;
+                  },
+                  a: ({ node, children, ...props }: any) => {
+                    const isExternal = props.href?.startsWith('http');
+                    return (
+                      <a
+                        className="text-brand-primary font-bold underline underline-offset-4 hover:text-brand-secondary transition-colors inline-flex items-center gap-1 group"
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                        {...props}
+                      >
+                        {children}
+                        {isExternal && (
+                          <svg className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        )}
+                      </a>
+                    );
                   },
                   img: ({ node, ...props }: any) => (
                     <div className="my-10 space-y-2">
